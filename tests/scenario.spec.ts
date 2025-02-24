@@ -44,43 +44,65 @@ test.describe('Test Scenarios', () => {
   });
 
   test('should have the register button disabled when required fields are empty', async ({ page }) => {
-    // Assuming that this is the approved criteria for the Register button
-    const registerButton = page.locator('#registerBtn');
-    await expect(registerButton).toBeDisabled();
+    try {
+      // Assuming that this is the approved criteria for the Register button
+      const registerButton = page.locator('#registerBtn');
+      await expect(registerButton).toBeDisabled();
+  
+    } catch (error) {
+      console.log('Error while checking the Register button state:', error);
+      await page.screenshot({ path: 'register_button_disabled_error.png' });
+      throw error;
+    }
   });
 
   test('should show error for phone number when it has less than 10 digits', async ({ page }) => {
-    await page.fill('input#firstName', 'Juan');
-    await page.fill('input#lastName', 'Dela Cruz');
-    await page.fill('input#phone', '123456789'); // Inputted less than 10 digits
-    await page.selectOption('#countries_dropdown_menu', { label: 'Philippines' });
-    await page.fill('#emailAddress', 'test@example.com');
-    await page.fill('#password', 'password123');
-    
-    // Skipping terms and conditions field
-
-    const registerButton = page.locator('#registerBtn');
-    await registerButton.click();
-
-    const phoneError = page.locator('#message'); // The error message is inside the div with id "message"
-    await expect(phoneError).toHaveText('The phone number should contain at least 10 characters!');
+    try {
+      await page.fill('input#firstName', 'Juan');
+      await page.fill('input#lastName', 'Dela Cruz');
+      await page.fill('input#phone', '123456789'); // Inputted less than 10 digits
+      await page.selectOption('#countries_dropdown_menu', { label: 'Philippines' });
+      await page.fill('#emailAddress', 'test@example.com');
+      await page.fill('#password', 'password123');
+      
+      // Skipping terms and conditions field
+  
+      const registerButton = page.locator('#registerBtn');
+      await registerButton.click();
+  
+      const phoneError = page.locator('#message'); // The error message is inside the div with id "message"
+      await expect(phoneError).toHaveText('The phone number should contain at least 10 characters!');
+  
+    } catch (error) {
+      console.log('Error occurred during the form submission or validation check:', error);
+      await page.screenshot({ path: 'phone_number_error.png' });
+      throw error;
+    }
   });
 
   test('should show error for password when it is less than 6 or more than 20 characters', async ({ page }) => {    
-    await page.fill('input#firstName', 'Juan');
-    await page.fill('input#lastName', 'Dela Cruz');
-    await page.fill('input#phone', '123456789');
-    await page.selectOption('#countries_dropdown_menu', { label: 'Philippines' });
-    await page.fill('#emailAddress', 'test@example.com');
-    await page.fill('#password', 'short'); // Password is less than 6 characters
-    
-    // Skipping terms and conditions field
-
-    const registerButton = page.locator('#registerBtn');
-    await registerButton.click();
-    
-    const passwordError = page.locator('#message'); // The error message is inside the div with id "message"
-    await expect(passwordError).toHaveText('The password should contain between [6,20] characters!');
+    try {
+      await page.fill('input#firstName', 'Juan');
+      await page.fill('input#lastName', 'Dela Cruz');
+      await page.fill('input#phone', '123456789');
+      await page.selectOption('#countries_dropdown_menu', { label: 'Philippines' });
+      await page.fill('#emailAddress', 'test@example.com');
+      await page.fill('#password', 'short'); // Password is less than 6 characters
+      
+      // Skipping terms and conditions field
+  
+      const registerButton = page.locator('#registerBtn');
+      await registerButton.click();
+      
+      const passwordError = page.locator('#message'); // The error message is inside the div with id "message"
+      await expect(passwordError).toHaveText('The password should contain between [6,20] characters!');
+  
+    } catch (error) {
+      console.log('Error occurred during form submission or validation check:', error);
+      await page.screenshot({ path: 'password_error.png' });
+      throw error;
+    }
+  
   });
   
 });
